@@ -1,6 +1,8 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const {
+  CleanWebpackPlugin
+} = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const webpack = require('webpack');
 
@@ -8,8 +10,8 @@ module.exports = {
   mode: "development",
   // 文件入口
   entry: {
-    // bundle: "./src/index.js",
-    app: './src/index.js',
+    index: './src/index.js',
+    another: './src/another-module.js'
   },
   // 文件出口
   output: {
@@ -34,10 +36,22 @@ module.exports = {
         removeComments: true
       }
     }),
-    new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    // new webpack.NamedModulesPlugin(),
+    // new webpack.HotModuleReplacementPlugin()
     // new ManifestPlugin() // 映射表
   ],
+  optimization: {
+    //抽取公共的dm
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          name: "commons",
+          chunks: "initial",
+          minChunks: 2
+        }
+      }
+    }
+  },
   module: {
     rules: [{
         test: /\.css$/,
